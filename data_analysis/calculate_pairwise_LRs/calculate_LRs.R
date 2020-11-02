@@ -18,7 +18,7 @@
 args = commandArgs(trailingOnly=TRUE)
 species <- args[1]
 refname <- args[2]
-sampname <- args[3]
+sampfname <- args[3]
 
 # load libraries
 suppressMessages(library(dplyr))
@@ -32,7 +32,7 @@ refgts <- read.table(refname, sep=',', header=TRUE)
 sampgts <- read.table(sampfname, sep=',', header=TRUE)
 
 # use same theta estimates as in the 2018 Sci Adv paper
-if (Species == "forest"){
+if (species == "forest"){
   Theta <- 0.059
 } else{
   Theta <- 0.047
@@ -42,7 +42,7 @@ if (Species == "forest"){
 results <- run_calc(refgts, sampgts, theta=Theta)
 
 # write the output
-write.table(results, file=paste0("obsLRs.", Species, ".txt"), 
+write.table(results, file=paste0("obsLRs.", species, ".txt"), 
             sep = "\t", 
             quote = F, 
             row.names = F)
