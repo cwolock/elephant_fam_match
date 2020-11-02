@@ -11,6 +11,8 @@
 # 2) reference file (.csv)  in long format, 2 lines per individual
 #    rec is to include only individuals genotyped at >= 10 loci
 # 3) sample file (.csv) in wide format, 1 line per individual
+#
+# output: tab-delimited file with pairwise LRs
 
 # read in command line args
 args = commandArgs(trailingOnly=TRUE)
@@ -40,4 +42,7 @@ if (Species == "forest"){
 results <- run_calc(refgts, sampgts, theta=Theta)
 
 # write the output
-write.csv(results, file=paste0("obsLRs.", Species, ".csv"))
+write.table(results, file=paste0("obsLRs.", Species, ".txt"), 
+            sep = "\t", 
+            quote = F, 
+            row.names = F)
