@@ -14,4 +14,4 @@ This code is meant to be run in a cluster environment.
 
 This code was used to perform familial matching on the tusks analyzed in the paper. For each pair of tusks, we calculate the likelihood ratios for all possible relationships. There are also useful scripts for post-processing, including applying the simulaton-determined likelihood ratio threshold, and analyzing the number of matches between seizures.
 
-The script `calculate_LRs.R` calculates **all** pairwise LRs in the sample file you provide. You should run this script from inside the directory where it lives, as it relies on helper functions in `LR_functions.R`.  
+The script `calculate_LRs.R` calculates pairwise LRs between all samples in the new sample file provided, plus LRs between pairs of samples where one is new and the other old. It does not calculate LRs between two old samples. You should run this script from inside the directory where it lives, as it relies on helper functions in `LR_functions.R`.  
