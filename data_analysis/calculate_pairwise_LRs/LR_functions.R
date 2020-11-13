@@ -162,20 +162,42 @@ calc_kinship <- function(unorder_gt_pair, kap, alleles, theta, afs){
 }
 
 ### function to perform the pairwise calculations
-run_calc <- function(pop_df, obs_df, theta){
+run_calc <- function(pop_df, old_df, obs_df, theta){
   
   # get all possible combinations of tusks
-  samples <- as.character(obs_df$Match.ID)
+  new_samples <- as.character(obs_df$Match.ID)
   obs_df$Match.ID <- NULL
-  sample_grid <- t(combn(samples, 2))
-  index_grid <- t(combn(1:nrow(obs_df),2))
-  # add 4 NA column to fit the LR we'll calculate, as well as 1 for nloci
-  sample_grid <- cbind(sample_grid, 
-                       matrix(, nrow=nrow(sample_grid), ncol=5))
-  
-  # get info from reference data
+  old_samples <- as.character(old_df$Match.ID)
+  old_df$Match.ID <- NULL
+
   # get allele names (dropping -999 which corresponds to missing)
   pop_df[pop_df == -999] <- NA
+  obs_df[obs_df == -999] <- NA
+  old_df[old_df == -999] <- NA
+
+  samples <- c(new_samples, old_samples)
+  obs_df <- rbind(obs_df, old_df)
+  
+  sample_grid <- t(combn(samples, 2))
+  index_grid <- t(combn(1:nrow(obs_df),2))
+  sample_grid_filt <- matrix(, nrow = nrow(sample_grid), ncol=2)
+  index_grid_filt <- matrix(, nrow = nrow(index_grid), ncol=2)
+  for (i in 1:nrow(sample_grid)){
+    if (sample_grid[i,1] %in% new_samples | 
+        sample_grid[i,2] %in% new_samples){
+      sample_grid_filt[i,] <- sample_grid[i,]
+      index_grid_filt[i,] <- index_grid[i,]
+    } 
+  }
+  incl_ind <- which(!is.na(sample_grid_filt[,1]))
+  sample_grid_filt <- sample_grid_filt[incl_ind,]
+  index_grid_filt <- index_grid_filt[incl_ind,]
+
+  # add 4 NA column to fit the LR we'll calculate, as well as 1 for nloci
+  sample_grid <- cbind(sample_grid_filt, 
+                       matrix(, nrow=nrow(sample_grid_filt), ncol=5))
+  index_grid <- index_grid_filt
+  # get info from reference data
   # consider the full range of alleles from all loci in the obs data
   # this way we avoid having to update alleles on the fly
   # and only have to tweak the frequencies
