@@ -23,7 +23,7 @@ def run(filtered_file):
             pair = (seiz1, seiz2)
             top_LR = line[top_ind]
             if pair not in seiz:
-                seiz[pair] = [0,0,0,0,0]
+                seiz[pair] = [0,0,0,0]
             if top_LR == 'DM':
                 seiz[pair][1] += 1
             elif top_LR == 'PO':
